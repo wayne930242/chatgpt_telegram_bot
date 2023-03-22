@@ -6,7 +6,7 @@ assistant:
   parse_mode: html
   parameters:
     temperature: 0.6
-    max_tokens: 3072
+    max_tokens: 1000
     top_p: 1
     frequency_penalty: 0
     presence_penalty: 0
@@ -20,7 +20,7 @@ code_assistant:
   parse_mode: markdown
   parameters:
     temperature: 0.5
-    max_tokens: 3072
+    max_tokens: 1000
     top_p: 1
     frequency_penalty: 0
     presence_penalty: 0
@@ -33,7 +33,7 @@ companion:
   parse_mode: html
   parameters:
     temperature: 0.8
-    max_tokens: 1024
+    max_tokens: 500
     top_p: 1
     frequency_penalty: 0
     presence_penalty: 0 
@@ -47,7 +47,7 @@ translator_zh_tw:
   parse_mode: html
   parameters:
     temperature: 0.5
-    max_tokens: 3072
+    max_tokens: 2000
     top_p: 1
     frequency_penalty: 0
     presence_penalty: 0
@@ -60,7 +60,7 @@ security_analyst:
   parse_mode: html
   parameters:
     temperature: 0.5
-    max_tokens: 3072
+    max_tokens: 1800
     top_p: 1
     frequency_penalty: 0
     presence_penalty: 0

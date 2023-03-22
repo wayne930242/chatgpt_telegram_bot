@@ -7,13 +7,6 @@ openai.api_key = config.openai_api_key
 
 CHAT_MODES = config.chat_modes
 
-OPENAI_COMPLETION_OPTIONS = {
-    "temperature": 0.7,
-    "max_tokens": 1000,
-    "top_p": 1,
-    "frequency_penalty": 0,
-    "presence_penalty": 0
-}
 
 
 class ChatGPT:
@@ -33,7 +26,7 @@ class ChatGPT:
                     r = await openai.ChatCompletion.acreate(
                         model="gpt-3.5-turbo",
                         messages=messages,
-                        **OPENAI_COMPLETION_OPTIONS
+                        **CHAT_MODES[chat_mode]["parameters"]
                     )
                     answer = r.choices[0].message["content"]
                 else:
@@ -41,7 +34,7 @@ class ChatGPT:
                     r = await openai.Completion.acreate(
                         engine="text-davinci-003",
                         prompt=prompt,
-                        **OPENAI_COMPLETION_OPTIONS
+                        **CHAT_MODES[chat_mode]["parameters"]
                     )
                     answer = r.choices[0].text
 
@@ -73,7 +66,7 @@ class ChatGPT:
                         model="gpt-3.5-turbo",
                         messages=messages,
                         stream=True,
-                        **OPENAI_COMPLETION_OPTIONS
+                        **CHAT_MODES[chat_mode]["parameters"]
                     )
 
                     answer = ""
@@ -90,7 +83,7 @@ class ChatGPT:
                         engine="text-davinci-003",
                         prompt=prompt,
                         stream=True,
-                        **OPENAI_COMPLETION_OPTIONS
+                        **CHAT_MODES[chat_mode]["parameters"]
                     )
                     
                     answer = ""

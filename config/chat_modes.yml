@@ -55,7 +55,7 @@ translator_zh_tw:
     frequency_penalty: 0
     presence_penalty: 0
 
-companion:
+socrates:
   name: 🧙‍♂️ 蘇格拉底
   welcome_message: 🧙‍♂️ 嗨，我是<b>蘇格拉底 GPT</b>。有什麼想跟我聊聊的呢？
   prompt_start: |

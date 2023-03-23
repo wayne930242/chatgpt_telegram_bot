@@ -67,8 +67,8 @@ companion:
     temperature: 0.9
     max_tokens: 300
     top_p: 1
-    frequency_penalty: 1.0
-    presence_penalty: 1.0 
+    frequency_penalty: 0.5
+    presence_penalty: 0.5
 
 security_analyst:
   name: 📈 證券分析師

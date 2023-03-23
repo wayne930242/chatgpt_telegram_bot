@@ -16,8 +16,8 @@ info:
 
   gpt-4:
     type: chat_completion
-    name: GPT-4
-    description: GPT-4 is the <b>smartest</b> and most advanced model in the world. But it is slower and not as cost-efficient as ChatGPT. Best choice for <b>complex</b> intellectual tasks.
+    name: GPT-4 (pending)
+    description: GPT-4 is the <b>smartest</b> and most advanced model in the world. But it is slower and not as cost-efficient as ChatGPT. Best choice for <b>complex</b> intellectual tasks. But I am on wishlist now.
 
     price_per_1000_input_tokens: 0.03
     price_per_1000_output_tokens: 0.06

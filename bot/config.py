@@ -27,8 +27,7 @@ with open(config_dir / "chat_modes.yml", 'r') as f:
 for mode, config in chat_modes.items():
     if not config.get("parameter"):
         chat_modes[mode]["parameters"] = chat_modes["assistant"]["parameters"]
-   
-# prices
-chatgpt_price_per_1000_tokens = config_yaml.get("chatgpt_price_per_1000_tokens", 0.002)
-gpt_price_per_1000_tokens = config_yaml.get("gpt_price_per_1000_tokens", 0.02)
-whisper_price_per_1_min = config_yaml.get("whisper_price_per_1_min", 0.006)
+
+# models
+with open(config_dir / "models.yml", 'r') as f:
+    models = yaml.safe_load(f)

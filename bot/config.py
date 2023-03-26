@@ -23,6 +23,10 @@ mongodb_uri = f"mongodb://mongo:{config_env['MONGODB_PORT']}"
 # chat_modes
 with open(config_dir / "chat_modes.yml", 'r') as f:
     chat_modes = yaml.safe_load(f)
+    
+for mode, config in chat_modes.items():
+    if not config.get("parameter"):
+        chat_modes[mode]["parameters"] = chat_modes["assistant"]["parameters"]
 
 # models
 with open(config_dir / "models.yml", 'r') as f:

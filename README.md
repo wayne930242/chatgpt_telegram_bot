@@ -11,7 +11,7 @@
 </p>
 
 ## Features
-- Low latency replies (it usually takes about 3-5 seconds) 
+- Low latency replies (it usually takes about 3-5 seconds)
 - No request limits
 - Message streaming (watch demo)
 - GPT-4 support

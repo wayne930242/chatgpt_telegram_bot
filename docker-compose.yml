@@ -18,6 +18,14 @@ services:
     build:
       context: "."
       dockerfile: Dockerfile
+    environment:
+      - MONGODB_PORT=${MONGODB_PORT:-27017}
+      - TELEGRAM_TOKEM=${TELEGRAM_TOKEM:-telegram_token}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-openai_api_key}
+      - USE_CHATGPT_API=${USE_CHATGPT_API:-True}
+      - ALLOWED_TELEGRAM_USERNAMES=${ALLOWED_TELEGRAM_USERNAMES:-[]}
+      - NEW_DIALOG_TIMEOUT=${NEW_DIALOG_TIMEOUT:-600}
+      - ENABLE_MESSAGE_STREAMING=${ENABLE_MESSAGE_STREAMING:-True}
     depends_on:
       - mongo
 

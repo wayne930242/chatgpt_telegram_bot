@@ -15,7 +15,7 @@ mongodb_port = os.getenv("MONGODB_PORT")
 telegram_token = os.getenv("TELEGRAM_TOKEM")
 openai_api_key = os.getenv("OPENAI_API_KEY")
 use_chatgpt_api = os.getenv("USE_CHATGPT_API", True)
-allowed_telegram_usernames = os.getenv("ALLOWED_TELEGRAM_USERNAMES", True)
+allowed_telegram_usernames = os.getenv("ALLOWED_TELEGRAM_USERNAMES", [])
 new_dialog_timeout = os.getenv("NEW_DIALOG_TIMEOUT", 60)
 enable_message_streaming = os.getenv("ENABLE_MESSAGE_STREAMING", True)
 

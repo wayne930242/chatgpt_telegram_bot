@@ -13,7 +13,7 @@ class ChatGPT:
     def __init__(self, model="gpt-3.5-turbo"):
         assert model in {"text-davinci-003", "gpt-3.5-turbo", "gpt-4"}, f"Unknown model: {model}"
         self.model = model
-    
+
     async def send_message(self, message, dialog_messages=[], chat_mode="assistant"):
         if chat_mode not in CHAT_MODES.keys():
             raise ValueError(f"Chat mode {chat_mode} is not supported")
@@ -87,7 +87,7 @@ class ChatGPT:
                         stream=True,
                         **CHAT_MODES[chat_mode]["parameters"]
                     )
-                    
+
                     answer = ""
                     async for r_item in r_gen:
                         answer += r_item.choices[0].text
@@ -96,7 +96,7 @@ class ChatGPT:
                     n_input_tokens, n_output_tokens = self._count_tokens_from_prompt(prompt, answer, model=self.model)
 
                 answer = self._postprocess_answer(answer)
-                
+
             except openai.error.InvalidRequestError as e:  # too many tokens
                 if len(dialog_messages) == 0:
                     raise ValueError("Dialog messages is reduced to zero, but still has too many tokens to make completion") from e
@@ -127,7 +127,7 @@ class ChatGPT:
 
     def _generate_prompt_messages(self, message, dialog_messages, chat_mode):
         prompt = CHAT_MODES[chat_mode]["prompt_start"]
-        
+
         messages = [{"role": "system", "content": prompt}]
         for dialog_message in dialog_messages:
             messages.append({"role": "user", "content": dialog_message["user"]})
@@ -151,7 +151,7 @@ class ChatGPT:
             tokens_per_name = 1
         else:
             raise ValueError(f"Unknown model: {model}")
-        
+
         # input
         n_input_tokens = 0
         for message in messages:
@@ -160,20 +160,20 @@ class ChatGPT:
                 n_input_tokens += len(encoding.encode(value))
                 if key == "name":
                     n_input_tokens += tokens_per_name
-                    
+
         n_input_tokens += 2
 
         # output
         n_output_tokens = 1 + len(encoding.encode(answer))
-        
+
         return n_input_tokens, n_output_tokens
-        
+
     def _count_tokens_from_prompt(self, prompt, answer, model="text-davinci-003"):
         encoding = tiktoken.encoding_for_model(model)
-        
+
         n_input_tokens = len(encoding.encode(prompt)) + 1
         n_output_tokens = len(encoding.encode(answer))
-        
+
         return n_input_tokens, n_output_tokens
 
 

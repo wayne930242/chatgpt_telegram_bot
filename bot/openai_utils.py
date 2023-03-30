@@ -39,7 +39,8 @@ class ChatGPT:
                     )
                     answer = r.choices[0].text
                 else:
-                    raise ValueError(f"Unknown model: {model}")
+                    config.logger.debug(f"Unknown model: {self.model}")
+                    raise ValueError(f"Unknown model: {self.model}")
 
                 answer = self._postprocess_answer(answer)
                 n_input_tokens, n_output_tokens = r.usage.prompt_tokens, r.usage.completion_tokens
@@ -138,6 +139,7 @@ class ChatGPT:
 
     def _postprocess_answer(self, answer):
         answer = answer.strip()
+        config.logger.debug(f"OpenAI API says：\n{answer}")
         return answer
 
     def _count_tokens_from_messages(self, messages, answer, model="gpt-3.5-turbo"):

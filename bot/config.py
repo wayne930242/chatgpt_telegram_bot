@@ -2,6 +2,7 @@ import yaml
 from dotenv import load_dotenv
 import os
 from pathlib import Path
+import logging
 
 config_dir = Path(__file__).parent.parent.resolve() / "config"
 
@@ -18,8 +19,16 @@ use_chatgpt_api = os.getenv("USE_CHATGPT_API", True)
 allowed_telegram_usernames = os.getenv("ALLOWED_TELEGRAM_USERNAMES", [])
 new_dialog_timeout = os.getenv("NEW_DIALOG_TIMEOUT", 60)
 enable_message_streaming = os.getenv("ENABLE_MESSAGE_STREAMING", True)
+debug_mode = os.getenv("DEBUG_MODE", False)
 
 mongodb_uri = f"mongodb://mongo:{mongodb_port}"
+
+#set logger and debug mode
+logger = logging.getLogger("telegram-chat-bot")
+logger.setLevel(logging.DEBUG if debug_mode else logging.INFO)
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(message)s'))
+logger.addHandler(stream_handler)
 
 # chat_modes
 with open(config_dir / "chat_modes.yml", 'r', encoding='UTF-8') as f:

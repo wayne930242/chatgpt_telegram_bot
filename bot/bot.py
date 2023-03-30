@@ -150,6 +150,7 @@ async def message_handle(update: Update, context: CallbackContext, message=None,
                 await update.message.reply_text(f"Starting new dialog due to timeout (<b>{openai_utils.CHAT_MODES[chat_mode]['name']}</b> mode) ✅", parse_mode=ParseMode.HTML)
         db.set_user_attribute(user_id, "last_interaction", datetime.now())
 
+        config.logger.debug(f"user say：\n{str(update.message)}")
         # send typing action
         await update.message.chat.send_action(action="typing")
 
@@ -502,8 +503,11 @@ def run_bot() -> None:
     application.add_error_handler(error_handle)
     
     # start the bot
-    application.run_polling()
-
-
+    try:
+        config.logger.debug("telegrame bot is running!")
+        application.run_polling()
+    except:
+        config.logger.debug("telegrame bot can't run~")
+    
 if __name__ == "__main__":
     run_bot()

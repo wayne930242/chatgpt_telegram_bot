@@ -1,0 +1,55 @@
+name: Chatgpt Telegram Bot CI-CD
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+  pull_request:
+    branches:
+      - main
+      - beta
+
+jobs:
+  deploy-beta:
+    runs-on: ubuntu-latest
+    environment: beta
+    if: github.ref == 'refs/heads/beta'
+    steps:
+      - name: Deploy to VPS
+        uses: aappleboy/ssh-action@master
+        with:
+          # VPS IP
+          host: ${{ secrets.VPS_SSH_HOST }}
+
+          # VPS username
+          username: ${{ secrets.VPS_SSH_USERNAME }}
+
+          # SSH key (copy it from your local machine)
+          key: ${{ secrets.VPS_SSH_SECRET }}
+          # SSH port
+          port: ${{ secrets.VPS_SSH_PORT }}
+          # passphrase
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+
+          script: |
+            cd ${{ secrets.PROJECT_PATH }}
+            cat << EOF > .env
+            MONGODB_PATH=${{ env.MONGODB_PATH }}
+            MONGODB_PORT=${{ env.MONGODB_PORT }}
+            MONGO_EXPRESS_PORT=${{ env.MONGO_EXPRESS_PORT }}
+            MONGO_EXPRESS_USERNAME=${{ env.MONGO_EXPRESS_USERNAME }}
+            MONGO_EXPRESS_PASSWORD=${{ env.MONGO_EXPRESS_PASSWORD }}
+            TELEGRAM_TOKEM=${{ secrets.TELEGRAM_TOKEM }}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            USE_CHATGPT_API=${{ env.USE_CHATGPT_API }}
+            ALLOWED_TELEGRAM_USERNAMES=${{ env.ALLOWED_TELEGRAM_USERNAMES }}
+            NEW_DIALOG_TIMEOUT=${{ env.NEW_DIALOG_TIMEOUT }}
+            ENABLE_MESSAGE_STREAMING=${{ env.ENABLE_MESSAGE_STREAMING }}
+            DEBUG_MODE=${{ env.DEBUG_MODE }}
+            EOF
+            git pull origin beta
+            make down
+            make build
+            echo "Deleting old image(s)..."
+            docker image prune -a -f

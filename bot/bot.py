@@ -441,13 +441,13 @@ async def show_balance_handle(update: Update, context: CallbackContext):
     await update.message.reply_text(text, parse_mode=ParseMode.HTML)
 
 """promt variable conversation"""
-def show_prompt_variable(user_id):
+def show_prompt_variable(user_id, chat_name):
     """傳回目前 pormpt variable 的設定字串"""
     dict_variables = db.get_user_attribute(user_id, 'prompt_variable')
     text = ""
     if dict_variables:
         text = "\n".join([f"{key}：{value}" for key, value in dict_variables.items()])    
-    return "您目前的 prompt variable 如下：\n" + text
+    return f"「{chat_name}」目前的 prompt variable 如下：\n" + text
 
 async def set_prompt_variable(update: Update, context: CallbackContext) -> int:
     """start a conversation to set prompt_variable"""
@@ -457,6 +457,7 @@ async def set_prompt_variable(update: Update, context: CallbackContext) -> int:
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
 
     chat_mode = db.get_user_attribute(user_id, "current_chat_mode")
+    chat_name = openai_utils.CHAT_MODES[chat_mode]["name"]
 
     prompt_variable = openai_utils.CHAT_MODES[chat_mode]["prompt_variable"]
     dict_prompt_variable = db.get_user_attribute(user_id, "prompt_variable")
@@ -466,7 +467,7 @@ async def set_prompt_variable(update: Update, context: CallbackContext) -> int:
         db.set_user_attribute(user_id, "prompt_variable", dict_prompt_variable)
         reply_keyboard=[[var] for var in prompt_variable] + [["結束"]]
         reply_markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-        current_variable = show_prompt_variable(user_id)
+        current_variable = show_prompt_variable(user_id, chat_name)
         await update.message.reply_text(
             f"{current_variable}\n請選擇您想設定的變數，設定完成請輸入「結束」.",
             reply_markup=reply_markup,
@@ -474,7 +475,7 @@ async def set_prompt_variable(update: Update, context: CallbackContext) -> int:
         )
         return CHOOSING
     else:
-        await update.message.reply_text(f"'{chat_mode}'沒有 prompt variable 相關設定")
+        await update.message.reply_text(f"「{chat_name}」沒有 prompt variable 相關設定")
         return ConversationHandler.END
 
 async def choose_variable(update:Update, context: CallbackContext):
@@ -500,6 +501,8 @@ async def received_information(update: Update, context: CallbackContext) -> int:
     user_id = update.message.from_user.id
 
     chat_mode = db.get_user_attribute(user_id, "current_chat_mode")
+    chat_name = openai_utils.CHAT_MODES[chat_mode]["name"]
+
     dict_variables = db.get_user_attribute(user_id, 'prompt_variable')
 
     if dict_variables:
@@ -516,14 +519,17 @@ async def received_information(update: Update, context: CallbackContext) -> int:
         )
         return CHOOSING
     else:
-        await update.message.reply_text(f"'{chat_mode}' has no prompt variable.")
+        await update.message.reply_text(f"「{chat_name}」 has no prompt variable.")
         return ConversationHandler.END
 
 async def done(update: Update, context: CallbackContext) -> int:
     """Display the gathered info and end the conversation."""
     user_id = update.message.from_user.id
 
-    text = show_prompt_variable(user_id)
+    chat_mode = db.get_user_attribute(user_id, "current_chat_mode")
+    chat_name = openai_utils.CHAT_MODES[chat_mode]["name"]
+
+    text = show_prompt_variable(user_id, chat_name)
     #清除user_data
     user_data = context.user_data
     if "choice" in user_data:
@@ -537,7 +543,7 @@ async def done(update: Update, context: CallbackContext) -> int:
         )
     else:        
         await update.message.reply_text(
-            "設定中的命令無效，將結束設定。請重新下命令",
+            "設定中的/命令無效，將結束設定。請重新下命令",
             reply_markup=ReplyKeyboardRemove()
         )
     return ConversationHandler.END

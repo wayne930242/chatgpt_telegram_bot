@@ -27,11 +27,11 @@ if allowed_telegram_usernames:
 else:
     allowed_telegram_usernames = []
 
-new_dialog_timeout = os.getenv("NEW_DIALOG_TIMEOUT", 60)
+new_dialog_timeout = int(os.getenv("NEW_DIALOG_TIMEOUT", 60)) if os.getenv("NEW_DIALOG_TIMEOUT", 60).isdigit() else 60
 enable_message_streaming = os.getenv("ENABLE_MESSAGE_STREAMING", "true").lower() == "true"
 debug_mode = os.getenv("DEBUG_MODE", "faslse").lower() == "true"
 
-mongodb_uri = f"mongodb://mongo:{mongodb_port}"
+mongodb_uri = f"mongodb://localhost:{mongodb_port}"
 
 #set logger and debug mode
 logger = logging.getLogger("telegram-chat-bot")

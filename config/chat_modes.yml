@@ -26,6 +26,7 @@ code_assistant:
     frequency_penalty: 0
     presence_penalty: 0
   prompt_variable:
+    程式語言: javascript
 
 translator_zh_tw:
   name: 🇹🇼 繁體中文翻譯器
@@ -74,7 +75,7 @@ game_assistent:
     frequency_penalty: 1.0
     presence_penalty: 0.5
   prompt_variable:
-    主題: 不限制
+    主題: 龍與地下城
     風格: 不限制
 
 
